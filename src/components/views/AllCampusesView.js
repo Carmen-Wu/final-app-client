@@ -44,6 +44,10 @@ const AllCampusesView = (props) => {
         <button>Add New Campus</button>
       </Link>
       <br/><br/>
+      <Link to={`/editCampus`}>
+        <button>Edit Campus</button>
+      </Link>
+      <br></br>
     </div>
   );
 };
