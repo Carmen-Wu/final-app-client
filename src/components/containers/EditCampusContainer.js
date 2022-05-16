@@ -30,7 +30,7 @@ class EditCampusContainer extends Component {
   //Get all campuses data from back-end database
   componentDidMount() {
     console.log(this.props);
-    this.props.fetchAllCampusesThunk();
+    this.props.fetchAllCampuses();
   }
 
   // Capture input data when it is entered
@@ -44,22 +44,54 @@ class EditCampusContainer extends Component {
   handleSubmit = async event => {
     event.preventDefault();  // Prevent browser reload/refresh after submit.
 
+    let inputname, inputaddress, inputimageUrl, inputdescription = "";
+
+    if(this.state.name.length === 0){
+      inputname = this.props.allCampuses.filter(x => x.id === this.state.id).name;
+    }
+    else{
+      inputname = this.state.name;
+    }
+    if(this.state.address.length === 0){
+      inputaddress = this.props.allCampuses.filter(x => x.id === this.state.id).address;
+    }
+    else{
+      inputaddress = this.state.address;
+    }
+    if(this.state.description.length === 0){
+      inputdescription = this.props.allCampuses.filter(x => x.id === this.state.id).description;
+    }
+    else{
+      inputdescription = this.state.description;
+    }
+    if(this.state.imageUrl.length === 0){
+      inputimageUrl = this.props.allCampuses.filter(x => x.id === this.state.id).imageUrl;
+    }
+    else{
+      inputimageUrl = this.state.imageUrl;
+    }
+
+
     let campus = {
-        name: this.state.name,
-        address: this.state.address,
-        description: this.state.description
+        id: this.state.id,
+        name: inputname,
+        address: inputaddress,
+        description: inputdescription,
+        imageUrl: inputimageUrl
     };
     
     // Add new campus in back-end database
-    let newCampus = await this.props.addCampus(campus);
+    await this.props.editCampus(campus);
 
     // Update state, and trigger redirect to show the new campus
     this.setState({
+      id: "",
       name: "", 
       address: "", 
       description: "", 
+      imageUrl: "",
       redirect: true, 
-      redirectId: newCampus.id
+      redirectId: campus.id
     });
   }
 
@@ -112,3 +144,4 @@ const mapState = (state) => {
 // NewStudentContainer uses "connect" function to connect to Redux Store and to read values from the Store 
 // (and re-read the values when the Store State updates).
 export default connect(mapState, mapDispatch)(EditCampusContainer);
+

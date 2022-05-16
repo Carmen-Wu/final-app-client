@@ -51,21 +51,32 @@ const EditCampusView = (props) => {
             </Typography>
           </div>
           <form style={{textAlign: 'center'}} onSubmit={(e) => handleSubmit(e)}>
-            <label style= {{color:'#11153e', fontWeight: 'bold'}}>Name: </label>
-            <input type="text" name="name" onChange ={(e) => handleChange(e)} required/>
+            <label style= {{color:'#11153e', fontWeight: 'bold'}}>Campus Id: </label>
+            <input required min = "1" max = {props.allCampuses.length} type = "number" name="id" onChange ={(e) => handleChange(e)} />
             <br/>
             <br/>
 
-            <label style={{color:'#11153e', fontWeight: 'bold'}}>Address: </label>
-            <input type="text" name="address" onChange={(e) => handleChange(e)} required/>
+
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>New Name: </label>
+            <input type="text" name="name" onChange={(e) => handleChange(e)}/>
             <br/>
             <br/>
 
-            <label style={{color:'#11153e', fontWeight: 'bold'}}>Description: </label>
-            <input type="text" name="description" onChange={(e) => handleChange(e)} required/>
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>New Address: </label>
+            <input type="text" name="address" onChange={(e) => handleChange(e)}/>
             <br/>
             <br/>
 
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>New Description: </label>
+            <input type="text" name="description" onChange={(e) => handleChange(e)}/>
+            <br/>
+            <br/>
+
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>New image URL: </label>
+            <input type="url" name="imageUrl" onChange={(e) => handleChange(e)}/>
+            <br/>
+            <br/>
+            
             <Button variant="contained" color="primary" type="submit">
               Submit
             </Button>
