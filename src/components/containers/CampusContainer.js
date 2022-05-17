@@ -11,10 +11,10 @@ import { connect } from "react-redux";
 import { fetchCampusThunk,
   deleteCampusThunk 
 } from "../../store/thunks";
-
 import { CampusView } from "../views";
 
 class CampusContainer extends Component {
+  
   // Get the specific campus data from back-end database
   componentDidMount() {
     // Get campus ID from URL (API link)

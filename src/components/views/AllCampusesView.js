@@ -36,6 +36,10 @@ const AllCampusesView = (props) => {
           <p>{campus.address}</p>
           <p>{campus.description}</p>
           <button onClick = {() => deleteCampus(campus.id)}>Delete</button>
+          <Link to={`/editcampus/${campus.id}`}>
+          <button>Edit</button>
+          </Link>
+          <br></br>
           <hr/>
         </div>
       ))}
@@ -44,10 +48,7 @@ const AllCampusesView = (props) => {
         <button>Add New Campus</button>
       </Link>
       <br/><br/>
-      <Link to={`/editCampus`}>
-        <button>Edit Campus</button>
-      </Link>
-      <br></br>
+
     </div>
   );
 };

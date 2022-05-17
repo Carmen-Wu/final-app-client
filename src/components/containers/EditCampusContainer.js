@@ -10,14 +10,13 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import EditCampusView from '../views/EditCampusView';
-import { editCampusThunk, fetchAllCampusesThunk } from '../../store/thunks';
+import { editCampusThunk, fetchCampusThunk, fetchAllStudentsThunk, editStudentThunk } from '../../store/thunks';
 
 class EditCampusContainer extends Component {
   // Initialize state
   constructor(props){
     super(props);
     this.state = {
-      id: null,
       name: "", 
       address: "", 
       description: "", 
@@ -27,10 +26,10 @@ class EditCampusContainer extends Component {
     };
   }
 
-  //Get all campuses data from back-end database
+  // Get all campuses data from back-end database
   componentDidMount() {
-    console.log(this.props);
-    this.props.fetchAllCampuses();
+    this.props.fetchCampus(this.props.match.params.id);
+    this.props.fetchAllStudents();
   }
 
   // Capture input data when it is entered
@@ -43,68 +42,73 @@ class EditCampusContainer extends Component {
   // Take action after user click the submit button
   handleSubmit = async event => {
     event.preventDefault();  // Prevent browser reload/refresh after submit.
-
-    let inputname, inputaddress, inputimageUrl, inputdescription = "";
-
+   
+    
+    let inputname,inputaddress,inputimageUrl,inputdescription = "";
     if(this.state.name.length === 0){
-      inputname = this.props.allCampuses.filter(x => x.id === this.state.id).name;
+      inputname = this.props.campus.name;
     }
     else{
       inputname = this.state.name;
     }
     if(this.state.address.length === 0){
-      inputaddress = this.props.allCampuses.filter(x => x.id === this.state.id).address;
+      inputaddress = this.props.campus.address;
     }
     else{
       inputaddress = this.state.address;
     }
     if(this.state.description.length === 0){
-      inputdescription = this.props.allCampuses.filter(x => x.id === this.state.id).description;
+      inputdescription = this.props.campus.description;
     }
     else{
       inputdescription = this.state.description;
     }
     if(this.state.imageUrl.length === 0){
-      inputimageUrl = this.props.allCampuses.filter(x => x.id === this.state.id).imageUrl;
+      inputimageUrl = this.props.campus.imageUrl;
     }
     else{
       inputimageUrl = this.state.imageUrl;
     }
-
-
-    let campus = {
-        id: this.state.id,
-        name: inputname,
-        address: inputaddress,
-        description: inputdescription,
-        imageUrl: inputimageUrl
-    };
+    let updateCampus = {
+      id: this.props.campus.id,
+      name: inputname,
+      address: inputaddress,
+      description: inputdescription,
+      imageUrl: inputimageUrl
+  };
     
-    // Add new campus in back-end database
-    await this.props.editCampus(campus);
+    // Edit campus in back-end database
+    await this.props.editCampus(updateCampus);
 
-    // Update state, and trigger redirect to show the new campus
+    // Update state, and trigger redirect to show the edited campus
     this.setState({
-      id: "",
       name: "", 
       address: "", 
-      description: "", 
+      description: "",
       imageUrl: "",
       redirect: true, 
-      redirectId: campus.id
+      redirectId: this.state.id
     });
   }
-
+  addStudent =(student) =>{
+    student.campusId = this.props.campus.id;
+    this.props.editStudent(student);
+  }
+  removeStudent=(student) =>{
+    student.campusId = null;
+    this.props.editStudent(student);
+  }
   // Unmount when the component is being removed from the DOM:
   componentWillUnmount() {
       this.setState({redirect: false, redirectId: null});
   }
 
-  // Render new campus input form
+  // Render new student input form
   render() {
-    // Redirect to new campu's page after submit
+    // Redirect to new student's page after submit
     if(this.state.redirect) {
-      return (<Redirect to={`/campus/${this.state.redirectId}`}/>)
+      //return (<Redirect to={`/campus/${this.state.redirectId}`}/>)
+      return (<Redirect to={`/campuses`}/>)
     }
 
     // Display the input form via the corresponding View component
@@ -113,8 +117,11 @@ class EditCampusContainer extends Component {
         <Header />
         <EditCampusView 
           handleChange = {this.handleChange} 
-          handleSubmit={this.handleSubmit}
-          allCampuses={this.props.allCampuses}      
+          handleSubmit={this.handleSubmit}      
+          campus={this.props.campus}
+          students={this.props.allStudents}
+          removeStudent={this.removeStudent}
+          addStudent={this.addStudent}
         />
       </div>          
     );
@@ -127,7 +134,9 @@ class EditCampusContainer extends Component {
 const mapDispatch = (dispatch) => {
     return({
         editCampus: (campus) => dispatch(editCampusThunk(campus)),
-        fetchAllCampuses: () => dispatch(fetchAllCampusesThunk()),
+        fetchCampus: (id) => dispatch(fetchCampusThunk(id)),
+        fetchAllStudents: () => dispatch(fetchAllStudentsThunk()),
+        editStudent: (student) => dispatch(editStudentThunk(student)),
     })
 }
 
@@ -135,13 +144,13 @@ const mapDispatch = (dispatch) => {
 // The "mapState" is called when the Store State changes, and it returns a data object of "allCampuses".
 // The following 2 input arguments are passed to the "connect" function used by "AllCampusesContainer" component to connect to Redux Store.
 const mapState = (state) => {
-    return {
-      allCampuses: state.allCampuses,  // Get the State object from Reducer "allCampuses"
-    };
-  };  
+  return {
+    campus: state.campus,  // Get the State object from Reducer "campus"
+    allStudents: state.allStudents,  // Get the State object from Reducer "allStudents"
+  };
+};  
 
 // Export store-connected container by default
-// NewStudentContainer uses "connect" function to connect to Redux Store and to read values from the Store 
+// EditCampusContainer uses "connect" function to connect to Redux Store and to read values from the Store 
 // (and re-read the values when the Store State updates).
 export default connect(mapState, mapDispatch)(EditCampusContainer);
-
