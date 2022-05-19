@@ -9,6 +9,7 @@ const HomePageView = () => {
   return (
     <div >
       <h1>Home Page</h1>
+      <p>Welcome to the Campus Management System</p>
     </div>
   );    
 }
