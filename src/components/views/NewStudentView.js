@@ -52,19 +52,35 @@ const NewStudentView = (props) => {
           </div>
           <form style={{textAlign: 'center'}} onSubmit={(e) => handleSubmit(e)}>
             <label style= {{color:'#11153e', fontWeight: 'bold'}}>First Name: </label>
-            <input type="text" name="firstname" onChange ={(e) => handleChange(e)} />
+            <input type="text" name="firstname" onChange ={(e) => handleChange(e)} required />
             <br/>
             <br/>
 
             <label style={{color:'#11153e', fontWeight: 'bold'}}>Last Name: </label>
-            <input type="text" name="lastname" onChange={(e) => handleChange(e)} />
+            <input type="text" name="lastname" onChange={(e) => handleChange(e)} required />
             <br/>
             <br/>
 
-            <label style={{color:'#11153e', fontWeight: 'bold'}}>Campus Id: </label>
-            <input type="text" name="campusId" onChange={(e) => handleChange(e)} />
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>Email: </label>
+            <input type="email" name="email" onChange={(e) => handleChange(e)} required />
             <br/>
             <br/>
+
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>GPA: </label>
+            <input type="number" name="gpa" min="0" max="4.00" step="0.01" onChange={(e) => handleChange(e)} required />
+            <br/>
+            <br/>
+
+            <label style= {{color:'#11153e', fontWeight: 'bold'}} for="campus">Choose a campus:</label>
+            <select name="campusId" id="campus" onChange ={(e) => handleChange(e)} required>
+            <option value = {null}>none</option>
+            {props.allCampuses.map((campus) => (
+              <option value={campus.id}>{campus.id}</option>
+              ))}
+            </select>
+            <br/>
+            <br/>
+            
 
             <Button variant="contained" color="primary" type="submit">
               Submit
