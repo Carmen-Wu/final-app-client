@@ -1,4 +1,9 @@
 # client-starter-code
+Group member:
+
+- Carmen Wu: Carmen-Wu 
+- Dian Chen: orzdian
+
 
 This repository is the client (front-end) starter code for Final Project (CRUD Application).
 
